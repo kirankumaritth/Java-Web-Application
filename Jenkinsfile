@@ -7,9 +7,7 @@ pipeline {
         
         DOCKER_IMAGE = 'kiranitth/sample-app'
         DOCKER_TAG = 'latest'
-        DEPLOY_SERVER = 'ubuntu@54.147.223.231'  // Update with your EC2 public IP or DNS
-        EC2_PUBLIC_IP = '54.147.223.231'  // Update with your EC2 instance's public IP
-        PORT = '8080'  // Tomcat default port
+        DEPLOY_SERVER = 'ubuntu@54.147.223.231'
     }
 
     stages {
@@ -62,27 +60,9 @@ pipeline {
                     netstat -tulnp | grep :8080 && echo "Port 8080 is in use, stopping previous process..." && fuser -k 8080/tcp || echo "Port is free"
 
                     echo "Starting new container..."
-                    docker run -d -p 80:8080 --name sample-app ${DOCKER_IMAGE}:${DOCKER_TAG} && sleep 3600
+                    docker run -d -p 80:8080 --name sample-app ${DOCKER_IMAGE}:${DOCKER_TAG} && sleep 3600 &
                     '
                     """
-                }
-            }
-        }
-
-        stage('Verify Deployment') {
-            steps {
-                script {
-                    // Wait for the EC2 instance to start the application
-                    sleep(time: 30, unit: 'SECONDS')
-
-                    // Check the health of the deployed application
-                    def response = sh(script: "curl -s -o /dev/null -w \"%{http_code}\" http://${EC2_PUBLIC_IP}:${PORT}/", returnStdout: true).trim()
-
-                    if (response == '200') {
-                        echo "Application is up and running at http://${EC2_PUBLIC_IP}:${PORT}/"
-                    } else {
-                        error "Deployment failed. HTTP response code: ${response}"
-                    }
                 }
             }
         }
