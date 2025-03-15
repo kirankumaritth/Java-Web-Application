@@ -16,7 +16,7 @@ pipeline {
                 script {
                     git branch: 'master', 
                         credentialsId: 'GitHub-Creds',
-                        url: 'https://github.com/kirankumaritth/simple-java-maven-app.git'
+                        url: 'https://github.com/kirankumaritth/Java-Web-Application.git'
                 }
             }
         }
