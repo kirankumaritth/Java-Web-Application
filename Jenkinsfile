@@ -14,7 +14,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
-                    git branch: 'master', 
+                    git branch: 'main', 
                         credentialsId: 'GitHub-Creds',
                         url: 'https://github.com/kirankumaritth/Java-Web-Application.git'
                 }
