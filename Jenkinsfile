@@ -60,7 +60,7 @@ pipeline {
                     netstat -tulnp | grep :8080 && echo "Port 8080 is in use, stopping previous process..." && fuser -k 8080/tcp || echo "Port is free"
 
                     echo "Starting new container..."
-                    docker run -d -p 80:8080 --name sample-app ${DOCKER_IMAGE}:${DOCKER_TAG}
+                    docker run -d -p 8081:8080 --name sample-app ${DOCKER_IMAGE}:${DOCKER_TAG}
                     '
                     """
                 }
