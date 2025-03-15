@@ -1,14 +1,14 @@
-# Use OpenJDK 17 on Alpine as the base image
-FROM openjdk:17-alpine
+# Use an official Tomcat image as the base image
+FROM tomcat:9-jdk17-openjdk-slim
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /usr/local/tomcat/webapps
 
-# Copy the JAR file into the container
-COPY target/devops-app-1.0-SNAPSHOT.jar app.jar
+# Copy the WAR file into the Tomcat webapps directory
+COPY target/java-web-app-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
 # Expose port 8080 for external access
 EXPOSE 8080
 
-# Run the Java application in the foreground and keep the container alive for at least 3600 seconds (1 hour)
-ENTRYPOINT ["sh", "-c", "java -jar /app/app.jar && sleep 3600"]
+# Start Tomcat and keep the container alive for 3600 seconds (1 hour)
+CMD ["sh", "-c", "catalina.sh run && sleep 3600"]
